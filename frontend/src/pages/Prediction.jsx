@@ -4,7 +4,7 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { Sun, CloudRain, ThermometerSun } from 'lucide-react';
 import { LocationContext } from '../context/LocationContext';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/weather';
+const API_BASE = 'https://weather-analysis-back.onrender.com/api/weather';
 
 export default function PredictionPage() {
   const { location: currentLoc } = useContext(LocationContext);

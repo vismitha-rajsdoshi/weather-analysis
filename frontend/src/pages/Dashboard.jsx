@@ -4,7 +4,7 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 import { Droplets, Wind, Thermometer, CloudRain } from 'lucide-react';
 import { LocationContext } from '../context/LocationContext';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/weather';
+const API_BASE = 'https://weather-analysis-back.onrender.com/api/weather';
 
 export default function Dashboard() {
   const { location: currentLoc } = useContext(LocationContext);
