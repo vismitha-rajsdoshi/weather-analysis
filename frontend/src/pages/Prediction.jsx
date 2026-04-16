@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Sun, CloudRain, ThermometerSun } from 'lucide-react';
+import { LocationContext } from '../context/LocationContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/weather';
 
 export default function PredictionPage() {
+  const { location: currentLoc } = useContext(LocationContext);
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch 7 days forecast for Bangalore
-    axios.get(`${API_BASE}/current?lat=12.9716&lon=77.5946`)
+    setLoading(true);
+    axios.get(`${API_BASE}/current?lat=${currentLoc.lat}&lon=${currentLoc.lon}`)
       .then(res => {
          if (res.data && res.data.daily) {
              const data = res.data.daily.time.map((time, idx) => ({
@@ -29,7 +31,7 @@ export default function PredictionPage() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [currentLoc]);
 
   return (
     <div className="fade-in">

@@ -4,6 +4,8 @@ import { LayoutDashboard, History, TrendingUp, CloudRain } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import HistoryPage from './pages/History';
 import PredictionPage from './pages/Prediction';
+import CitySearch from './components/CitySearch';
+import { LocationProvider } from './context/LocationContext';
 import './index.css';
 
 function Sidebar() {
@@ -16,6 +18,8 @@ function Sidebar() {
         </h2>
       </div>
       
+      <CitySearch />
+
       <div className="sidebar-nav">
           <NavLink to="/" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
             <LayoutDashboard size={20} />
@@ -36,18 +40,20 @@ function Sidebar() {
 
 function App() {
   return (
-    <Router>
-      <div className="layout">
-        <Sidebar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/prediction" element={<PredictionPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <LocationProvider>
+      <Router>
+        <div className="layout">
+          <Sidebar />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/history" element={<HistoryPage />} />
+              <Route path="/prediction" element={<PredictionPage />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </LocationProvider>
   );
 }
 

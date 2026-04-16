@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, BarChart, Bar } from 'recharts';
+import { LocationContext } from '../context/LocationContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/weather';
 
 export default function HistoryPage() {
+  const { location: currentLoc } = useContext(LocationContext);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch 14 days archive for Bangalore
-    axios.get(`${API_BASE}/history-api?lat=12.9716&lon=77.5946`)
+    setLoading(true);
+    axios.get(`${API_BASE}/history-api?lat=${currentLoc.lat}&lon=${currentLoc.lon}`)
       .then(res => {
          if (res.data && res.data.daily) {
              const data = res.data.daily.time.map((time, idx) => ({
@@ -26,7 +28,7 @@ export default function HistoryPage() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [currentLoc]);
 
   return (
     <div className="fade-in">

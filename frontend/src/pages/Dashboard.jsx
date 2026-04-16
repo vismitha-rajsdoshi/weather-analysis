@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Droplets, Wind, Thermometer, CloudRain } from 'lucide-react';
+import { LocationContext } from '../context/LocationContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/weather';
 
 export default function Dashboard() {
+  const { location: currentLoc } = useContext(LocationContext);
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`${API_BASE}/current?lat=12.9716&lon=77.5946`)
+    setLoading(true);
+    axios.get(`${API_BASE}/current?lat=${currentLoc.lat}&lon=${currentLoc.lon}`)
       .then(res => {
         setWeather(res.data);
         setLoading(false);
@@ -19,7 +22,7 @@ export default function Dashboard() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [currentLoc]);
 
   if (loading) return <div className="glass-panel"><h2>Loading Live Data...</h2></div>;
   if (!weather || !weather.current_weather) return <div className="glass-panel"><h2>Error loading data. Backend might be down.</h2></div>;
@@ -41,7 +44,7 @@ export default function Dashboard() {
       <header className="page-header">
          <div>
              <h1>Live Dashboard</h1>
-             <p className="subtitle">Real-time planetary metrics for Bangalore, India</p>
+             <p className="subtitle">Real-time planetary metrics for {currentLoc.name}</p>
          </div>
       </header>
       
